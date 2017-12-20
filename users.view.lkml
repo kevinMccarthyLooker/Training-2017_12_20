@@ -1,50 +1,48 @@
 view: users {
   sql_table_name: public.users ;;
 
+#######################
+##### Primary Key #####
+
   dimension: id {
     primary_key: yes
+    #hidden: yes
     type: number
     sql: ${TABLE}.id ;;
   }
 
-  dimension: age {
-    type: number
-    sql: ${TABLE}.age ;;
-  }
+########################
+##### Contact Info #####
+#To do: Create Full Name
 
-  dimension: city {
+  dimension: first_name {
     type: string
-    sql: ${TABLE}.city ;;
+    sql: ${TABLE}.first_name;;
   }
 
-  dimension: country {
+  dimension: last_name {
     type: string
-    map_layer_name: countries
-    sql: ${TABLE}.country ;;
+    sql: ${TABLE}.last_name ;;
   }
 
-  dimension_group: created {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.created_at ;;
-  }
+#   dimension: full_name {
+#     type: string
+#     sql: ${first_name} || ' ' || ${last_name} ;;
+#   }
 
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;
   }
 
-  dimension: first_name {
-    type: string
-    sql: ${TABLE}.first_name ;;
+############################
+##### Demographic Info #####
+#To do: Create years_as_consumer
+#To do: Create age tiers
+
+  dimension: age {
+    type: number
+    sql: ${TABLE}.age ;;
   }
 
   dimension: gender {
@@ -52,9 +50,38 @@ view: users {
     sql: ${TABLE}.gender ;;
   }
 
-  dimension: last_name {
+##############################
+##### Created Dates Info #####
+#To do: Add Quarter Created and Day Of Year Created
+  dimension_group: created {
+    type: time
+    timeframes: [raw,date,month,year]
+    sql: ${TABLE}.created_at ;;
+  }
+
+#########################
+##### Loctaion Info #####
+#To do: Add is_domestic yesNo
+#To do: Enable mapping: Add Location type field or state map_layer_name
+
+  dimension: city {
     type: string
-    sql: ${TABLE}.last_name ;;
+    sql: ${TABLE}.city ;;
+  }
+
+  dimension: state {
+    type: string
+    sql: ${TABLE}.state ;;
+  }
+
+  dimension: country {
+    type: string
+    sql: ${TABLE}.country ;;
+  }
+
+  dimension: zip {
+    type: zipcode
+    sql: ${TABLE}.zip ;;
   }
 
   dimension: latitude {
@@ -67,23 +94,37 @@ view: users {
     sql: ${TABLE}.longitude ;;
   }
 
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-  }
-
+######################
+##### Other Info #####
+#To do: Add is_Organic
   dimension: traffic_source {
     type: string
     sql: ${TABLE}.traffic_source ;;
   }
 
-  dimension: zip {
-    type: zipcode
-    sql: ${TABLE}.zip ;;
-  }
+#   dimension: is_Organic {
+#     type: yesno
+#     sql: ${traffic_source}='Organic' ;;
+#   }
+#
+#   measure: count_organic {
+#     type: count
+#     filters: {
+#       field: is_Organic
+#       value: "Yes"
+#     }
+#   }
 
+####################
+##### Measures #####
+
+# To do: Create Domestic User Count
   measure: count {
     type: count
     drill_fields: [id, first_name, last_name, events.count, order_items.count]
   }
+
 }
+# To Do: Add group_labels
+#Exercise: Add city, state field
+#Exercise: Add age tier with groupings 0-17, 18-64, 65 and above
