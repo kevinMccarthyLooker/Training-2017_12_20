@@ -17,13 +17,19 @@ view: users {
 
   dimension: first_name {
     type: string
-    sql: ${TABLE}.first_name;;
+    sql: left(${TABLE}.first_name, 1);;
   }
 
   dimension: last_name {
     type: string
     sql: ${TABLE}.last_name ;;
   }
+
+  dimension: full_name {
+    type: string
+    sql: ${first_name} || ' ' || ${last_name} ;;
+  }
+
 
 #   dimension: full_name {
 #     type: string
@@ -43,6 +49,13 @@ view: users {
   dimension: age {
     type: number
     sql: ${TABLE}.age ;;
+  }
+
+  dimension: age_tier {
+    type: tier
+    style: integer
+    sql: ${age} ;;
+    tiers: [20,30,40,50,60,70]
   }
 
   dimension: gender {
@@ -100,6 +113,11 @@ view: users {
   dimension: traffic_source {
     type: string
     sql: ${TABLE}.traffic_source ;;
+  }
+
+  dimension: is_organice {
+    type: yesno
+    sql: ${traffic_source}='Organic' ;;
   }
 
 #   dimension: is_Organic {

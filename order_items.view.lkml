@@ -53,6 +53,20 @@ view: order_items {
     drill_fields: [detail*]
   }
 
+  measure: total_sale_price {
+    type: sum
+    sql: ${sale_price} ;;
+  }
+
+  measure: total_sale_price_organic {
+    type: sum
+    sql: ${sale_price} ;;
+    filters: {
+      field: users.is_organice
+      value: "Yes"
+    }
+  }
+
 
   # ----- Sets of fields for drilling ------
   set: detail {
